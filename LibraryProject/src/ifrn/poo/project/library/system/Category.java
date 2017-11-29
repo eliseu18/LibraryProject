@@ -18,5 +18,4 @@ public interface Category {
 	Collection searchName(String name);
 	Collection searchYear(int year);
 	Collection searchPublishCompany(String publish);
-	// Test
 }
