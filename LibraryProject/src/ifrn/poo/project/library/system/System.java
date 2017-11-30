@@ -1,10 +1,10 @@
 package ifrn.poo.project.library.system;
 
 public interface System {
+	Library libraries = null;
 	
-	void CreateLibrary(String name, String address);
-	void CreateCategory(String name, int id);
 	void SearchValue(String value, int option);
+	String returnFields(String type, String name);
 	
 	
 }
