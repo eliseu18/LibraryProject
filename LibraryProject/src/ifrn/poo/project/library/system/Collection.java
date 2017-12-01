@@ -1,8 +1,6 @@
 package ifrn.poo.project.library.system;
 
-public interface Collection {
-	
-	
+abstract interface Collection {
 	
 	void setName(String name);
 	void setId(int id);

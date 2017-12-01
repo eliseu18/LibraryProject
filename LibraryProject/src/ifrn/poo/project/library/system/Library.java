@@ -4,7 +4,7 @@ public interface Library {
 	
 	void setName(String name);
 	void setAddress(String address);
-	void setCategories(Category category);
+	void setCategory(Category category);
 	String getName();
 	String getAddress();
 	Category getCategory();
