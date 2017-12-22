@@ -1,16 +1,19 @@
 package ifrn.poo.project.library.system;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 public class CategoryImplementation implements Category {
 	
-	int id;	// ID of each category
-	int num_collection; // Total of collections on this category
-	int num_books;	// Total of books..
-	int num_magazines;
-	int num_movies;
-	int num_audios;
-	int num_theses;
-	String name; // Category name.
-	Collection[] books;
+	private int id;	// ID of each category
+	private int num_collection; // Total of collections on this category
+	private int num_books;	// Total of books..
+	private int num_magazines;
+	private int num_movies;
+	private int num_audios;
+	private int num_theses;
+	private String name; // Category name.
+	private HashMap<Integer,Collection> books;
 	
 	CategoryImplementation(){
 		this.id = -1;
@@ -21,10 +24,11 @@ public class CategoryImplementation implements Category {
 		this.num_audios = 0;
 		this.num_theses = 0;
 		this.name = null;
-		this.books = null;
+		this.books = new HashMap<Integer,Collection>();
+		initializeBooks();
 	}
 	
-	public void setName(String name) {
+	 public void setName(String name) {
 		this.name = name;
 	}
 	
@@ -33,8 +37,50 @@ public class CategoryImplementation implements Category {
 	}
 	
 	// Must check the object type and add plus 1 to it's type variable
-	public void setBooks(Collection book) {
-		// Array implementation
+	/*
+	 * (non-Javadoc)
+	 * @see ifrn.poo.project.library.system.Category#setCollection(ifrn.poo.project.library.system.Collection)
+	 * In this method i will use HashMap to Index the Collection first letter and i will use ordered list chain to
+	 * create a group of objects with that letter.
+	 */
+	public void setCollection(Collection book){
+		try {
+			int firstletter = book.getName().charAt(0); // firstletter is a int that represents a ansi char
+			if(firstletter < 65 || firstletter > 90) { // Checking if it between A to Z
+				firstletter = 64;						// If not, put in the first position @ for all special char.
+			}
+			Collection item = this.books.get(firstletter);
+			Collection previous = null;
+			if(item == null) { 
+				item = book;
+				countType(book);
+			}
+			else{
+				if (isItHere(item.getName(), book.getName())) {
+					book.setNext(item);
+					this.books.put(firstletter, book);
+					countType(book);
+				}else {
+					do{
+						previous = item;
+						item = item.getNext();
+						if(item == null) {
+							previous.setNext(book);
+							countType(book);
+						}else {
+							if(isItHere(item.getName(), book.getName())) {
+								previous.setNext(book);
+								book.setNext(item);
+								countType(book);
+								item = null;
+							}
+						}
+					}while(item != null);
+				}
+			}
+		}catch (Throwable exc){
+			throw exc;
+		}
 	}
 	
 	public String getName() {
@@ -57,10 +103,6 @@ public class CategoryImplementation implements Category {
 		return this.num_books;
 	}
 	
-	public int getNumMagazines(){
-		return this.num_magazines;
-	}
-	
 	public int getNumMovies() {
 		return this.num_movies;
 	}
@@ -74,19 +116,103 @@ public class CategoryImplementation implements Category {
 	}
 
 	public Collection searchId(int id) {
-		return null; //Implement search method by ID.
+		int firstletter = id/100000;
+		if(firstletter < 65 || firstletter > 90) {
+			firstletter = 64;
+		}
+		Collection current = books.get(firstletter);
+		while(current != null) {
+			if(current.getId() == id) {
+				return current;
+			}else
+				current = current.getNext();
+		}
+		return null; 
 	}
 	
-	public Collection searchName(String name) {
-		return null;// Implement search method by name.
+	public ArrayList<Collection> searchName(String name) {
+		ArrayList<Collection> list = new ArrayList<Collection>();
+		Collection current = null;
+		for (int i = 64; i < 91; i++) {
+			current = books.get(i);
+			while(current != null) {
+				if(current.getName().contains(name))
+					list.add(current);
+				current = current.getNext();
+			}
+		}
+		return list;
 	}
 	
-	public Collection searchYear(int year) {
-		return null;// Implement search method by year;
+	public ArrayList<Collection> searchYear(int year) {
+		ArrayList<Collection> list = new ArrayList<Collection>();
+		Collection current = null;
+		for (int i = 64; i < 91; i++) {
+			current = books.get(i);
+			while(current != null) {
+				if(current.getYear() == year)
+					list.add(current);
+				current = current.getNext();
+			}
+		}
+		return list;// Implement search method by year;
 	}
 	
-	public Collection searchPublishCompany(String publish) {
-		return null;// Implement search method by publish
+	public ArrayList<Collection> searchPublishCompany(String publish) {
+		ArrayList<Collection> list = new ArrayList<Collection>();
+		Collection current = null;
+		for (int i = 64; i < 91; i++) {
+			current = books.get(i);
+			while(current != null) {
+				if(current.getPublishCompany().contains(publish))
+					list.add(current);
+				current = current.getNext();
+			}
+		}
+		return list;
 	}
 	
+	/*
+	 * In this implementation book is a hashmap and has two values, a integer that is a char Ansi value. We also have a collection object.
+	 * The integer represents a number, after it will be converted to a char. It will represent a char between A to ]
+	 */
+	
+	private void initializeBooks() {
+		Integer letter = 64;
+		//Search about char math methods.
+		for(int i = 0; i <= 24; i++) {
+			books.put(letter, null);
+			letter++;
+		}
+	}
+	
+	/*
+	 * It compares two strings alphabetically, if the first one comes first it will return true, if the second one comes first it will
+	 * return false  
+	 */
+	private boolean isItHere(String first, String second) {
+		if(first.compareToIgnoreCase(second) >= 0)
+			return true;
+		else
+			return false;
+	}
+	
+	private void countType(Collection book){
+		if(book instanceof Audio)
+			this.num_audios++;
+		else {
+			if(book instanceof Book) {
+				this.num_books++;
+			}
+			else {
+				if(book instanceof Movie) {
+					this.num_movies++;
+				}else {
+					if(book instanceof Theses)
+						this.num_theses++;
+				}
+			}
+		}
+		this.num_collection++;
+	}
 }

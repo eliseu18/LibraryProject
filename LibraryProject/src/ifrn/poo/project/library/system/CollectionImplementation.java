@@ -1,20 +1,21 @@
 package ifrn.poo.project.library.system;
 
    public class CollectionImplementation implements Collection{
-	int id;
-	int year;
-	int num_copies;
-	int borrowed;
-	String author;
-	String publish_company;
-	String name;
-	Category category;
+	protected int id;
+	protected int year;
+	protected int num_copies;
+	protected int borrowed;
+	protected String author;
+	protected String publish_company;
+	protected String name;
+	protected Category category;
+	protected Collection next;
 	
 	CollectionImplementation(){
 		this.id = -1;
 		this.year = -1;
-		this.num_copies = -1;
-		this.borrowed = -1;
+		this.num_copies = 0;
+		this.borrowed = 0;
 		this.author = "";
 		this.publish_company = "";
 		this.name = "";
@@ -53,6 +54,10 @@ package ifrn.poo.project.library.system;
 		this.borrowed = borrowed;
 	}
 	
+	public void setNext(Collection book){
+		next = book;
+	}
+	
 	public String getName() {
 		return this.name;
 	}
@@ -85,7 +90,10 @@ package ifrn.poo.project.library.system;
 		return this.borrowed;
 	}
 	
+	public Collection getNext() {
+		return next;
+	}
 	public int availability() {
-		return -1;
+		return (this.num_copies - this.borrowed);
 	}
 }

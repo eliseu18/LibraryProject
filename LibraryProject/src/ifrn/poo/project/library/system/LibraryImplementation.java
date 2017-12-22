@@ -1,14 +1,15 @@
 package ifrn.poo.project.library.system;
+import java.util.ArrayList;
 
 public class LibraryImplementation implements Library{
 	String name;
 	String address;
-	Category[] categories;
+	ArrayList<Category> categories;
 	
-	LibraryImplementation(){
+	public LibraryImplementation(){
 		this.name = null;
 		this.address = null;
-		this.categories = null;
+		this.categories = new ArrayList<Category>();
 	}
 	
 	public void setName(String name) {
@@ -31,15 +32,23 @@ public class LibraryImplementation implements Library{
 		return this.address;
 	}
 	
-	public Category getCategory() {
-		return null; // Implement search;
+	public ArrayList<Category> getCategories() {
+		return this.categories;
 	}
 	
 	public Category searchCategoryName(String name) {
+		for(int i = 0; i < categories.size(); i++) {
+			if(categories.get(i).getName().equals(name))
+				return categories.get(i);
+		}
 		return null; // Implement search;
 	}
 	
 	public Category searchCategoryId(int id) {
-		return null; // Implement search
+		for(int i = 0; i < categories.size(); i++) {
+			if(categories.get(i).getId() == id)
+				return categories.get(i);
+		}
+		return null; // Implement search;
 	}
 }

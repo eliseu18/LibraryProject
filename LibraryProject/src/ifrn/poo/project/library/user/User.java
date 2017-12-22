@@ -1,4 +1,5 @@
 package ifrn.poo.project.library.user;
+import ifrn.poo.project.library.system.*;
 
 public interface User {
 

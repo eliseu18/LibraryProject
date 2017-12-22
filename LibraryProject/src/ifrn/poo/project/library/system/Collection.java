@@ -1,6 +1,6 @@
 package ifrn.poo.project.library.system;
 
-abstract interface Collection {
+public abstract interface Collection {
 	
 	void setName(String name);
 	void setId(int id);
@@ -10,6 +10,8 @@ abstract interface Collection {
 	void setPublishCompany(String publish);
 	void setNumCopies(int num);
 	void setBorrowed(int borrowed);
+	void setNext(Collection book);
+	Collection getNext();
 	String getName();
 	int getId();
 	Category getCategory();

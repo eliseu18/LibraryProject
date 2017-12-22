@@ -1,21 +1,21 @@
 package ifrn.poo.project.library.system;
+import java.util.ArrayList;
 
 public interface Category {
 	
-	void setName(String name);
+    void setName(String name);
 	void setId(int id);
-	void setBooks(Collection book);
+	void setCollection(Collection book);
 	String getName();
 	int getId();
 	Collection getCollection();
 	int getNumCollection();
 	int getNumBooks();
-	int getNumMagazines();
 	int getNumMovies();
 	int getNumAudio();
 	int getNumTheses();
 	Collection searchId(int id);
-	Collection searchName(String name);
-	Collection searchYear(int year);
-	Collection searchPublishCompany(String publish);
+	ArrayList<Collection> searchName(String name);
+	ArrayList<Collection> searchYear(int year);
+	ArrayList<Collection> searchPublishCompany(String publish);
 }

@@ -1,4 +1,5 @@
 package ifrn.poo.project.library.system;
+import java.util.ArrayList;
 
 public interface Library {
 	
@@ -7,7 +8,7 @@ public interface Library {
 	void setCategory(Category category);
 	String getName();
 	String getAddress();
-	Category getCategory();
+	ArrayList<Category> getCategories();
 	Category searchCategoryName(String name);
 	Category searchCategoryId(int id);
 }
